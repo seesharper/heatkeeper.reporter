@@ -11,6 +11,6 @@ RUN dotnet script dummy.csx
 # Copy the build file
 COPY build_rtl433.sh .
 RUN chmod +x build_rtl433.sh
-RUN ./build_433.sh
+RUN ./build_rtl433.sh
 
 ENTRYPOINT [ "dotnet", "script" ]

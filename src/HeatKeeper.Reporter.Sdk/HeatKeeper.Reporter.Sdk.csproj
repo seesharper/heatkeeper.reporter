@@ -2,6 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Bernhard Richter</Authors>
+    <Description>Contains the HeatKeeper reporter SDK and the docker image definition.</Description>
+    <Copyright>Bernhard Richter</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryUrl>https://github.com/seesharper/heatkeeper.reporter</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>HeatKeeper</PackageTags>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>portable</DebugType>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Version>0.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
