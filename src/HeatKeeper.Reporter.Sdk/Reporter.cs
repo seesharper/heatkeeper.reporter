@@ -13,7 +13,7 @@ namespace HeatKeeper.Reporter.Sdk
     {
         private TimeSpan publishIntervall = new TimeSpan(0, 0, 5);
 
-        private Dictionary<int, Sensor> sensors = new Dictionary<int, Sensor>();
+        private Dictionary<string, Sensor> sensors = new Dictionary<string, Sensor>();
 
         // Contains the last measurements per sensor
         private ConcurrentDictionary<string, Measurement[]> cache = new ConcurrentDictionary<string, Measurement[]>();
@@ -65,7 +65,7 @@ namespace HeatKeeper.Reporter.Sdk
 
         public Reporter AddSensor(Sensor sensor)
         {
-            sensors.Add(sensor.ProtocolId, sensor);
+            sensors.Add(sensor.Model, sensor);
             return this;
         }
 
@@ -88,7 +88,12 @@ namespace HeatKeeper.Reporter.Sdk
             process.StartInfo = startInfo;
             process.Start();
             process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
             process.Exited += (sender, args) => Console.WriteLine("Exited");
+            process.ErrorDataReceived += (SetIndexBinder, args) =>
+            {
+                Console.Error.WriteLine(args.Data);
+            };
             process.OutputDataReceived += (sender, args) =>
             {
                 if (args.Data == null)
@@ -101,18 +106,13 @@ namespace HeatKeeper.Reporter.Sdk
 
                 var document = System.Text.Json.JsonDocument.Parse(args.Data);
 
-                var protocol = document.RootElement.GetProperty("protocol").GetInt32();
-                if (sensors.TryGetValue(protocol, out var sensor))
+                var model = document.RootElement.GetProperty("model").GetString();
+                if (sensors.TryGetValue(model, out var sensor))
                 {
                     var id = document.RootElement.GetProperty("id").GetRawText();
                     var measurements = new MeasurementFactory().CreateMeasurements(document.RootElement, sensor);
                     cache.AddOrUpdate(id, i => measurements, (i, m) => measurements);
                 }
-
-
-
-
-
             };
             process.WaitForExit();
 
