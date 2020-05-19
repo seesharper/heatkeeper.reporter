@@ -20,6 +20,7 @@ Step pack = () =>
 [StepDescription("Creates the Docker image")]
 AsyncStep dockerImage = async () =>
 {
+    await Command.ExecuteAsync("docker", $@"build --rm -f ""Dockerfile"" -t bernhardrichter/heatkeeper.reporter:{BuildContext.LatestTag} -t bernhardrichter/heatkeeper.reporter:latest .", BuildContext.RepositoryFolder);
     await Docker.BuildAsync("bernhardrichter/heatkeeper.reporter", BuildContext.LatestTag, BuildContext.RepositoryFolder);
 };
 
@@ -29,6 +30,11 @@ AsyncStep deploy = async () =>
 {
     pack();
     await dockerImage();
+    if (BuildEnvironment.IsSecure && BuildEnvironment.IsTagCommit)
+    {
+        await Docker.PushAsync("bernhardrichter/heatkeeper.reporter", BuildContext.LatestTag, BuildContext.BuildFolder);
+        await Docker.PushAsync("bernhardrichter/heatkeeper.reporter", "latest", BuildContext.BuildFolder); await Docker.PushAsync("bernhardrichter/heatkeeper.reporter", BuildContext.LatestTag, BuildContext.BuildFolder);
+    }
     await Artifacts.Deploy();
 };
 
