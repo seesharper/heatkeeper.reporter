@@ -71,7 +71,7 @@ namespace HeatKeeper.Reporter.Sdk
 
         private void StartRtl()
         {
-            var protocolArguments = sensors.Select(s => $"-R {s.Key}").Aggregate((current, next) => $"{current} {next}");
+            var protocolArguments = sensors.Select(s => $"-R {s.Value.ProtocolId}").Aggregate((current, next) => $"{current} {next}");
 
             var startInfo = new ProcessStartInfo();
 
