@@ -1,0 +1,11 @@
+{
+  "time": "2020-05-18 22:36:14",
+  "protocol": 40,
+  "model": "Acurite-Tower",
+  "id": 13843,
+  "channel": "A",
+  "battery_ok": 1,
+  "temperature_C": 4.8,
+  "humidity": 75,
+  "mic": "CHECKSUM"
+}

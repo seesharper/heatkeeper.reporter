@@ -8,11 +8,12 @@ namespace HeatKeeper.Reporter.Sdk
     {
         public Measurement[] CreateMeasurements(JsonElement payload, Sensor sensor)
         {
-            List<Measurement> result = new List<Measurement>();
+            var result = new List<Measurement>();
+
+            var id = payload.GetProperty("id").GetRawText();
 
             foreach (var mapping in sensor.Mappings)
             {
-                var id = payload.GetProperty("id").GetRawText();
                 double value = payload.GetProperty(mapping.PropertyName).GetDouble();
                 var measurement = new Measurement(id, mapping.MeasurementType, mapping.ConvertFunction(value), DateTime.UtcNow);
                 result.Add(measurement);

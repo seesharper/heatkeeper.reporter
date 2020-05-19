@@ -1,0 +1,9 @@
+{
+  "time": "2020-05-18 22:36:32",
+  "protocol": 55,
+  "model": "Acurite-606TX",
+  "id": 193,
+  "battery_ok": 1,
+  "temperature_C": 22.2,
+  "mic": "CHECKSUM"
+}

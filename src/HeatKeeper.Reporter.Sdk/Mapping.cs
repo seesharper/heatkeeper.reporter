@@ -8,6 +8,7 @@ namespace HeatKeeper.Reporter.Sdk
         {
             PropertyName = propertyName;
             MeasurementType = measurementType;
+            convertFunction ??= d => d;
             ConvertFunction = convertFunction;
         }
 

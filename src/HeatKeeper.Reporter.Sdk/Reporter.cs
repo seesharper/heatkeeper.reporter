@@ -13,12 +13,12 @@ namespace HeatKeeper.Reporter.Sdk
     {
         private TimeSpan publishIntervall = new TimeSpan(0, 0, 5);
 
-        private Dictionary<string, Sensor> sensors = new Dictionary<string, Sensor>();
+        private readonly Dictionary<string, Sensor> sensors = new Dictionary<string, Sensor>();
 
         // Contains the last measurements per sensor
-        private ConcurrentDictionary<string, Measurement[]> cache = new ConcurrentDictionary<string, Measurement[]>();
+        private readonly ConcurrentDictionary<string, Measurement[]> cache = new ConcurrentDictionary<string, Measurement[]>();
 
-        private HttpClient httpClient = new HttpClient();
+        private readonly HttpClient httpClient = new HttpClient();
 
         private string apiKey;
 
