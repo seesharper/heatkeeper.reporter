@@ -1,10 +1,10 @@
-#r "nuget:HeatKeeper.Reporter.Sdk, 0.0.3"
+
+#r "nuget:System.Text.Json, 4.7.1"
 using System;
 using System.Collections.Concurrent;
 using System.Globalization;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
-using HeatKeeper.Reporter.Sdk;
 JsonDocument.Parse("TEST");
 Console.WriteLine("TEST");
