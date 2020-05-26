@@ -5,7 +5,7 @@ RUN dotnet tool install dotnet-script --tool-path /usr/bin
 # Execute a dummy script at build time to warm the nuget cache
 RUN echo "Console.WriteLine(42);" > dummy.csx
 RUN dotnet script dummy.csx
-
+RUN dotnet script --info
 RUN apt-get update
 RUN apt-get install -y git libtool libusb-1.0-0-dev librtlsdr-dev rtl-sdr build-essential autoconf cmake pkg-config
 RUN git clone https://github.com/merbanan/rtl_433.git
