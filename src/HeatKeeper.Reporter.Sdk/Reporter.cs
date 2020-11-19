@@ -40,6 +40,7 @@ namespace HeatKeeper.Reporter.Sdk
                 {
                     Console.WriteLine($"Publishing {item.Value.Count()} measurements");
                     var content = new JsonContent(item.Value);
+                    Console.WriteLine(content);
                     var response = await httpClient.PostAsync("api/measurements", content);
                     response.EnsureSuccessStatusCode();
                 }
@@ -82,17 +83,18 @@ namespace HeatKeeper.Reporter.Sdk
             startInfo.CreateNoWindow = true;
             startInfo.UseShellExecute = false;
 
-
-
             var process = new Process();
             process.StartInfo = startInfo;
             process.Start();
             process.BeginOutputReadLine();
             process.BeginErrorReadLine();
-            process.Exited += (sender, args) => Console.WriteLine("Exited");
+            process.Exited += (sender, args) =>
+            {
+                throw new Exception("the rtl_433 process has exited");
+            };
             process.ErrorDataReceived += (SetIndexBinder, args) =>
             {
-                Console.Error.WriteLine(args.Data);
+                throw new Exception(args.Data);
             };
             process.OutputDataReceived += (sender, args) =>
             {
@@ -101,7 +103,7 @@ namespace HeatKeeper.Reporter.Sdk
                     return;
                 }
 
-                Console.WriteLine(args.Data);
+                Console.Error.WriteLine(args.Data);
 
 
                 var document = System.Text.Json.JsonDocument.Parse(args.Data);
@@ -112,6 +114,10 @@ namespace HeatKeeper.Reporter.Sdk
                     var id = document.RootElement.GetProperty("id").GetRawText();
                     var measurements = new MeasurementFactory().CreateMeasurements(document.RootElement, sensor);
                     cache.AddOrUpdate(id, i => measurements, (i, m) => measurements);
+                }
+                else
+                {
+                    Console.Error.WriteLine($"Unknown model {model}");
                 }
             };
             process.WaitForExit();
