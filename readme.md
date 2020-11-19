@@ -1,5 +1,20 @@
 ## Usage
 
+Update Raspberry PI OS
+
+```
+sudo apt-get update && sudo apt-get upgrade
+```
+
+Install Docker
+
+```
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+```
+
+https://phoenixnap.com/kb/docker-on-raspberry-pi
+
 We need to map the RealTek USB dongle device to the container.
 
 ```
