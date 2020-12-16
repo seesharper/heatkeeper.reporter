@@ -1,0 +1,35 @@
+{
+  "Header": {
+    "FrameSize": 155,
+    "Length": 8,
+    "StartPosition": 1,
+    "IsValid": true
+  },
+  "TimeStamp": "2020-12-09T15:00:10Z",
+  "Payload": {
+    "DataType": 2,
+    "Value": [
+      { "DataType": 9, "Value": "KFM_001" },
+      { "DataType": 9, "Value": "6970631403082809" },
+      { "DataType": 9, "Value": "MA304H3E" },
+      { "DataType": 6, "Value": 5826 },
+      { "DataType": 6, "Value": 0 },
+      { "DataType": 6, "Value": 0 },
+      { "DataType": 6, "Value": 270 },
+      { "DataType": 6, "Value": 4667 },
+      { "DataType": 6, "Value": 21099 },
+      { "DataType": 6, "Value": 21298 },
+      { "DataType": 6, "Value": 2350 },
+      { "DataType": 6, "Value": 0 },
+      { "DataType": 6, "Value": 2304 },
+      {
+        "DataType": 9,
+        "Value": "\u0007?\f\t\u0003\u0010\u0000\n??\u0000\u0000"
+      },
+      { "DataType": 6, "Value": 104984977 },
+      { "DataType": 6, "Value": 0 },
+      { "DataType": 6, "Value": 4591014 },
+      { "DataType": 6, "Value": 1885098 }
+    ]
+  }
+}

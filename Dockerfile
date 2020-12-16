@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1
+FROM mcr.microsoft.com/dotnet/sdk:5.0
 
 WORKDIR /tmp/
 RUN dotnet tool install dotnet-script --tool-path /usr/bin
@@ -15,4 +15,7 @@ COPY build_rtl433.sh .
 RUN chmod +x build_rtl433.sh
 RUN ./build_rtl433.sh
 
+WORKDIR /
+RUN curl -L https://github.com/seesharper/HANReader/releases/latest/download/hanreader-linux-arm --output hanreader-linux-arm
+RUN ls -al
 ENTRYPOINT [ "dotnet", "script" ]

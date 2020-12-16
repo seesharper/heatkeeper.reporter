@@ -7,5 +7,11 @@ namespace HeatKeeper.Reporter.Sdk.Tests
         string AcuriteTower { get; }
 
         string FineoffsetWH2 { get; }
+
+        string Kaifka_MA304H3E_List1 { get; }
+
+        string Kaifka_MA304H3E_List2 { get; }
+
+        string Kaifka_MA304H3E_List3 { get; }
     }
 }
