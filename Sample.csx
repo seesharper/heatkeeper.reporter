@@ -11,8 +11,6 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using HeatKeeper.Reporter.Sdk;
 
-JsonDocument.Parse("TEST");
-
 string apiKey = "";
 
 

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HeatKeeper.Reporter.Sdk
 {
-    public class Reporter
+    public class RTL433Reporter
     {
         private TimeSpan publishIntervall = new TimeSpan(0, 0, 5);
 
@@ -51,20 +51,20 @@ namespace HeatKeeper.Reporter.Sdk
         }
 
 
-        public Reporter WithPublishInterval(TimeSpan publishIntervall)
+        public RTL433Reporter WithPublishInterval(TimeSpan publishIntervall)
         {
             this.publishIntervall = publishIntervall;
             return this;
         }
 
-        public Reporter WithHeatKeeperEndpoint(string url, string apiKey)
+        public RTL433Reporter WithHeatKeeperEndpoint(string url, string apiKey)
         {
             this.heatKeeperUrl = url;
             this.apiKey = apiKey;
             return this;
         }
 
-        public Reporter AddSensor(Sensor sensor)
+        public RTL433Reporter AddSensor(Sensor sensor)
         {
             sensors.Add(sensor.Model, sensor);
             return this;
@@ -94,7 +94,7 @@ namespace HeatKeeper.Reporter.Sdk
             };
             process.ErrorDataReceived += (SetIndexBinder, args) =>
             {
-                throw new Exception(args.Data);
+                Console.Error.WriteLine(args.Data);
             };
             process.OutputDataReceived += (sender, args) =>
             {
