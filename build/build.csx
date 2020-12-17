@@ -29,12 +29,12 @@ AsyncStep dockerImage = async () =>
 AsyncStep deploy = async () =>
 {
     pack();
-    await dockerImage();
-    if (BuildEnvironment.IsSecure && BuildEnvironment.IsTagCommit)
-    {
-        await Docker.PushAsync("bernhardrichter/heatkeeper.reporter", BuildContext.LatestTag, BuildContext.BuildFolder);
-        await Docker.PushAsync("bernhardrichter/heatkeeper.reporter", "latest", BuildContext.BuildFolder); await Docker.PushAsync("bernhardrichter/heatkeeper.reporter", BuildContext.LatestTag, BuildContext.BuildFolder);
-    }
+    // await dockerImage();
+    // if (BuildEnvironment.IsSecure && BuildEnvironment.IsTagCommit)
+    // {
+    //     await Docker.PushAsync("bernhardrichter/heatkeeper.reporter", BuildContext.LatestTag, BuildContext.BuildFolder);
+    //     await Docker.PushAsync("bernhardrichter/heatkeeper.reporter", "latest", BuildContext.BuildFolder); await Docker.PushAsync("bernhardrichter/heatkeeper.reporter", BuildContext.LatestTag, BuildContext.BuildFolder);
+    // }
     await Artifacts.Deploy();
 };
 

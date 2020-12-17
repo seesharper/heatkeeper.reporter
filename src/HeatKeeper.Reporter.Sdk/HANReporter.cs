@@ -154,20 +154,23 @@ namespace HeatKeeper.Reporter.Sdk
 
         private async Task PublishMeasurements()
         {
-            var allmeasurements = new List<Measurement>();
-            while (queue.TryDequeue(out var measurements))
+            while (true)
             {
-                allmeasurements.AddRange(measurements);
-            }
-            var content = new JsonContent(allmeasurements.ToArray());
+                var allmeasurements = new List<Measurement>();
+                while (queue.TryDequeue(out var measurements))
+                {
+                    allmeasurements.AddRange(measurements);
+                }
+                var content = new JsonContent(allmeasurements.ToArray());
+                Console.WriteLine($"Publishing {allmeasurements.Count} measurements");
+                var response = await httpClient.PostAsync("api/measurements", content);
+                if (!response.IsSuccessStatusCode)
+                {
+                    Console.Error.WriteLine("Failed to post HAN measurements");
+                }
 
-            var response = await httpClient.PostAsync("api/measurements", content);
-            if (!response.IsSuccessStatusCode)
-            {
-                Console.Error.WriteLine("Failed to post HAN measurements");
+                await Task.Delay(publishIntervall);
             }
-
-            await Task.Delay(publishIntervall);
         }
 
         private async Task StartHANReader()
