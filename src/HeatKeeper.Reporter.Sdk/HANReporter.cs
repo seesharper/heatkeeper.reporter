@@ -159,7 +159,7 @@ namespace HeatKeeper.Reporter.Sdk
             {
                 allmeasurements.AddRange(measurements);
             }
-            var content = new JsonContent(allmeasurements);
+            var content = new JsonContent(allmeasurements.ToArray());
 
             var response = await httpClient.PostAsync("api/measurements", content);
             if (!response.IsSuccessStatusCode)
