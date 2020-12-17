@@ -50,6 +50,7 @@ namespace HeatKeeper.Reporter.Sdk.Tests
         {
             await new ReporterHost()
                 .AddReporter(new HANReporter().WithSerialPort("dfs").WithPublishIntervall(new TimeSpan(0, 10, 0)))
+                .AddReporter(new RTL433Reporter().AddSensor(Sensors.Acurite606TX).WithPublishIntervall(new TimeSpan(0, 10, 0)))
                 .Start();
         }
     }
