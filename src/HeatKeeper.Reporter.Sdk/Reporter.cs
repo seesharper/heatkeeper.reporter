@@ -9,10 +9,8 @@ using System.Threading.Tasks;
 
 namespace HeatKeeper.Reporter.Sdk
 {
-    public class RTL433Reporter
+    public class RTL433Reporter : Reporter
     {
-        private TimeSpan publishIntervall = new TimeSpan(0, 0, 5);
-
         private readonly Dictionary<string, Sensor> sensors = new Dictionary<string, Sensor>();
 
         // Contains the last measurements per sensor
@@ -20,15 +18,12 @@ namespace HeatKeeper.Reporter.Sdk
 
         private readonly HttpClient httpClient = new HttpClient();
 
-        private string apiKey;
 
-        private string heatKeeperUrl;
-
-        public void Start()
+        internal override async Task Start()
         {
-            httpClient.BaseAddress = new Uri(heatKeeperUrl);
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.apiKey);
-            Task.WhenAny(Task.Run(() => StartRtl()), PublishMeasurements()).Result.Wait();
+            httpClient.BaseAddress = new Uri(this.EndpointConfiguration.Url);
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.EndpointConfiguration.ApiKey);
+            await Task.WhenAny(StartRtl(), PublishMeasurements());
         }
 
 
@@ -45,23 +40,7 @@ namespace HeatKeeper.Reporter.Sdk
                     response.EnsureSuccessStatusCode();
                 }
                 await Task.Delay(publishIntervall);
-
             }
-
-        }
-
-
-        public RTL433Reporter WithPublishInterval(TimeSpan publishIntervall)
-        {
-            this.publishIntervall = publishIntervall;
-            return this;
-        }
-
-        public RTL433Reporter WithHeatKeeperEndpoint(string url, string apiKey)
-        {
-            this.heatKeeperUrl = url;
-            this.apiKey = apiKey;
-            return this;
         }
 
         public RTL433Reporter AddSensor(Sensor sensor)
@@ -70,58 +49,28 @@ namespace HeatKeeper.Reporter.Sdk
             return this;
         }
 
-        private void StartRtl()
+        private async Task StartRtl()
         {
             var protocolArguments = sensors.Select(s => $"-R {s.Value.ProtocolId}").Aggregate((current, next) => $"{current} {next}");
+            var arguments = $"-F json -M protocol -M utc {protocolArguments}";
+            await Command.ExecuteAsync("rtl_433", arguments, ProcessData);
+        }
 
-            var startInfo = new ProcessStartInfo();
+        private void ProcessData(string data)
+        {
+            var document = System.Text.Json.JsonDocument.Parse(data);
 
-            startInfo.FileName = "rtl_433";
-            startInfo.Arguments = $"-F json -M protocol -M utc {protocolArguments}";
-            startInfo.RedirectStandardOutput = true;
-            startInfo.RedirectStandardError = true;
-            startInfo.CreateNoWindow = true;
-            startInfo.UseShellExecute = false;
-
-            var process = new Process();
-            process.StartInfo = startInfo;
-            process.Start();
-            process.BeginOutputReadLine();
-            process.BeginErrorReadLine();
-            process.Exited += (sender, args) =>
+            var model = document.RootElement.GetProperty("model").GetString();
+            if (sensors.TryGetValue(model, out var sensor))
             {
-                throw new Exception("the rtl_433 process has exited");
-            };
-            process.ErrorDataReceived += (SetIndexBinder, args) =>
+                var id = document.RootElement.GetProperty("id").GetRawText();
+                var measurements = new MeasurementFactory().CreateMeasurements(document.RootElement, sensor);
+                cache.AddOrUpdate(id, i => measurements, (i, m) => measurements);
+            }
+            else
             {
-                Console.Error.WriteLine(args.Data);
-            };
-            process.OutputDataReceived += (sender, args) =>
-            {
-                if (args.Data == null)
-                {
-                    return;
-                }
-
-                Console.Error.WriteLine(args.Data);
-
-
-                var document = System.Text.Json.JsonDocument.Parse(args.Data);
-
-                var model = document.RootElement.GetProperty("model").GetString();
-                if (sensors.TryGetValue(model, out var sensor))
-                {
-                    var id = document.RootElement.GetProperty("id").GetRawText();
-                    var measurements = new MeasurementFactory().CreateMeasurements(document.RootElement, sensor);
-                    cache.AddOrUpdate(id, i => measurements, (i, m) => measurements);
-                }
-                else
-                {
-                    Console.Error.WriteLine($"Unknown model {model}");
-                }
-            };
-            process.WaitForExit();
-
+                Console.Error.WriteLine($"Unknown model {model}");
+            }
         }
     }
 

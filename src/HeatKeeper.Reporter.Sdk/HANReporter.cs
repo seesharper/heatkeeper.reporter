@@ -97,6 +97,7 @@ namespace HeatKeeper.Reporter.Sdk
             {
                 if (args.Data != null)
                 {
+                    Console.Error.WriteLine(args.Data);
                     dataReceived(args.Data);
                 }
             }
