@@ -1,5 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:5.0
 
+ENV TZ Europe/Oslo
+
 WORKDIR /tmp/
 RUN dotnet tool install dotnet-script --tool-path /usr/bin
 # Execute a dummy script at build time to warm the nuget cache
