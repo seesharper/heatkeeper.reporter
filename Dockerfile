@@ -16,6 +16,9 @@ RUN chmod +x build_rtl433.sh
 RUN ./build_rtl433.sh
 
 WORKDIR /
-RUN curl -L https://github.com/seesharper/HANReader/releases/latest/download/hanreader-linux-arm --output hanreader-linux-arm
+
+WORKDIR /
+RUN curl -L https://github.com/seesharper/HANReader/releases/latest/download/hanreader-linux-arm --output /usr/local/bin/hanreader-linux-arm
+RUN chmod +x /usr/local/bin/hanreader-linux-arm
 RUN ls -al
 ENTRYPOINT [ "dotnet", "script" ]
