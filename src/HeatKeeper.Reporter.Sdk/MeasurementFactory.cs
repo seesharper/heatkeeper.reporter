@@ -28,7 +28,7 @@ namespace HeatKeeper.Reporter.Sdk
     {
         public Measurement[] CreateMeasurements(JsonElement rootElement)
         {
-            var timeStamp = rootElement.GetProperty("TimeStamp").GetDateTime();
+            var timeStamp = rootElement.GetProperty("TimeStamp").GetDateTime().ToUniversalTime();
             var payLoadElement = rootElement.GetProperty("Payload");
             var rootPayloadElement = payLoadElement.GetProperty("Value");
             var arrayLength = rootPayloadElement.GetArrayLength();
