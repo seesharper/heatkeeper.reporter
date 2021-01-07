@@ -85,12 +85,16 @@ If the Raspberry won't boot for any reason, make sure to check out this link
 https://raspberrypi.stackexchange.com/questions/40854/kernel-panic-not-syncing-vfs-unable-to-mount-root-fs-on-unknown-block179-6
 ```
 
+I did this from ubuntu. Please unmount before running command
 
+```
+sudo fsck /dev/sdc1
+sudo fsck /dev/sdc2
+```
 
 ```
 new ReporterHost()
 	.WithHeatKeeperUrl("http://sdfsdfds", "dsfsdfkljsdfkjsdfskdj")
 	.AddReporter(new RTL433Reporter().AddSensor)
-	
-```
 
+```
