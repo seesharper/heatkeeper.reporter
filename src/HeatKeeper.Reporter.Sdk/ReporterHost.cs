@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,6 +27,7 @@ namespace HeatKeeper.Reporter.Sdk
         public async Task Start()
         {
             await Task.WhenAll(reporters.Select(r => r.Start()));
+            Console.Error.WriteLine("ReporterHost exited");
         }
     }
 }
