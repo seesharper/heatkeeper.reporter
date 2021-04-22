@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -17,7 +16,6 @@ namespace HeatKeeper.Reporter.Sdk
         private readonly ConcurrentDictionary<string, Measurement[]> cache = new ConcurrentDictionary<string, Measurement[]>();
 
         private readonly HttpClient httpClient = new HttpClient();
-
 
         internal override async Task Start()
         {
@@ -37,7 +35,10 @@ namespace HeatKeeper.Reporter.Sdk
                     var content = new JsonContent(item.Value);
                     Console.WriteLine(content);
                     var response = await httpClient.PostAsync("api/measurements", content);
-                    response.EnsureSuccessStatusCode();
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        Console.Error.WriteLine("Failed to post HAN measurements");
+                    }
                 }
                 await Task.Delay(publishIntervall);
             }
@@ -73,5 +74,4 @@ namespace HeatKeeper.Reporter.Sdk
             }
         }
     }
-
 }
