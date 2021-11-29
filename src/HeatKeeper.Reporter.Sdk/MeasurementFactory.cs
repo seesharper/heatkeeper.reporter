@@ -24,15 +24,31 @@ namespace HeatKeeper.Reporter.Sdk
     }
 
 
-    public class HANMeasurementsFactory
+    public class KaifaMeasurementsFactory
     {
-        public Measurement[] CreateMeasurements(JsonElement rootElement)
+
+        public Measurement[] CreateMeasurements(JsonElement element)
         {
-            var timeStamp = rootElement.GetProperty("TimeStamp").GetDateTime().ToUniversalTime();
+            var measurements = new List<Measurement>();
+            var numberOfFrames = element.GetArrayLength();
+
+            for (int i = 0; i < numberOfFrames; i++)
+            {
+                measurements.AddRange(CreateMeasurementsFromFrame(element[i]));
+            }
+
+
+            return measurements.ToArray();
+        }
+
+
+
+        private Measurement[] CreateMeasurementsFromFrame(JsonElement rootElement)
+        {
+            var timeStamp = rootElement.GetProperty("Timestamp").GetDateTime().ToUniversalTime();
             var payLoadElement = rootElement.GetProperty("Payload");
             var rootPayloadElement = payLoadElement.GetProperty("Value");
             var arrayLength = rootPayloadElement.GetArrayLength();
-
 
             if (arrayLength == 13)
             {
@@ -55,6 +71,8 @@ namespace HeatKeeper.Reporter.Sdk
 
                 return new Measurement[] { activePowerMeasurement, currentPhase1Measurement, currentPhase2Measurement, currentPhase3Measurement, voltageBetweenPhase1AndPhase2Measurement, voltageBetweenPhase2AndPhase3Measurement };
             }
+
+
 
             return Array.Empty<Measurement>();
         }

@@ -1,10 +1,15 @@
-{
-  "Header": {
-    "FrameSize": 39,
-    "Length": 8,
-    "StartPosition": 1,
-    "IsValid": true
-  },
-  "TimeStamp": "2020-12-09T15:03:32Z",
-  "Payload": { "DataType": 2, "Value": [{ "DataType": 6, "Value": 7069 }] }
-}
+[
+  {
+    "Timestamp": "2021-11-23T23:43:08",
+    "Framesize": 39,
+    "Payload": {
+      "DataType": 2,
+      "Value": [
+        {
+          "DataType": 6,
+          "Value": 5437
+        }
+      ]
+    }
+  }
+]
