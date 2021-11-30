@@ -13,7 +13,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
-    <Version>0.1.6</Version>
+    <Version>0.1.8</Version>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
