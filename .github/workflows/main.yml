@@ -5,6 +5,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: List files in the repository
+        run: |
+            ls -al ${{ github.workspace }}
       - name: Run build script
         run: cd ${{ github.workspace }}/build && build.sh
         env: # Or as an environment variable
