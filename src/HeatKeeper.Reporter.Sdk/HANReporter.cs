@@ -78,7 +78,7 @@ namespace HeatKeeper.Reporter.Sdk
 
         private void ProcessData(string data)
         {
-            HANMeasurementsFactory measurementsFactory = new HANMeasurementsFactory();
+            KaifaMeasurementsFactory measurementsFactory = new KaifaMeasurementsFactory();
             var document = JsonDocument.Parse(data);
             var measurements = measurementsFactory.CreateMeasurements(document.RootElement);
             queue.Enqueue(measurements);

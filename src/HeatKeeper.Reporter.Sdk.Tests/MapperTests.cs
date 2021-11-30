@@ -38,11 +38,11 @@ namespace HeatKeeper.Reporter.Sdk.Tests
         }
 
         [Fact]
-        public void ShouldMap_Kaifka_MA304H3E_List1()
+        public void ShouldMap_Kaifka_MA304H3E_List2()
         {
             var sensorData = new ResourceBuilder().AddAssembly(typeof(MapperTests).Assembly).Build<ISensorData>();
             var document = JsonDocument.Parse(sensorData.Kaifka_MA304H3E_List2);
-            var measurements = new HANMeasurementsFactory().CreateMeasurements(document.RootElement);
+            var measurements = new KaifaMeasurementsFactory().CreateMeasurements(document.RootElement);
             measurements.Length.Should().Be(6);
         }
 

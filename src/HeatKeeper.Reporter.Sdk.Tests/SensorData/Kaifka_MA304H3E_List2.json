@@ -1,27 +1,63 @@
-{
-  "Header": {
-    "FrameSize": 121,
-    "Length": 8,
-    "StartPosition": 1,
-    "IsValid": true
-  },
-  "TimeStamp": "2020-12-09T15:03:30Z",
-  "Payload": {
-    "DataType": 2,
-    "Value": [
-      { "DataType": 9, "Value": "KFM_001" },
-      { "DataType": 9, "Value": "6970631403082809" },
-      { "DataType": 9, "Value": "MA304H3E" },
-      { "DataType": 6, "Value": 7068 },
-      { "DataType": 6, "Value": 0 },
-      { "DataType": 6, "Value": 25 },
-      { "DataType": 6, "Value": 0 },
-      { "DataType": 6, "Value": 9272 },
-      { "DataType": 6, "Value": 21859 },
-      { "DataType": 6, "Value": 24265 },
-      { "DataType": 6, "Value": 2336 },
-      { "DataType": 6, "Value": 0 },
-      { "DataType": 6, "Value": 2303 }
-    ]
+[
+  {
+    "Timestamp": "2021-11-23T23:43:10",
+    "Framesize": 121,
+    "Payload": {
+      "DataType": 2,
+      "Value": [
+        {
+          "DataType": 9,
+          "Value": "KFM_001"
+        },
+        {
+          "DataType": 9,
+          "Value": "6970631403082809"
+        },
+        {
+          "DataType": 9,
+          "Value": "MA304H3E"
+        },
+        {
+          "DataType": 6,
+          "Value": 5437
+        },
+        {
+          "DataType": 6,
+          "Value": 0
+        },
+        {
+          "DataType": 6,
+          "Value": 185
+        },
+        {
+          "DataType": 6,
+          "Value": 0
+        },
+        {
+          "DataType": 6,
+          "Value": 2658
+        },
+        {
+          "DataType": 6,
+          "Value": 20866
+        },
+        {
+          "DataType": 6,
+          "Value": 20857
+        },
+        {
+          "DataType": 6,
+          "Value": 2381
+        },
+        {
+          "DataType": 6,
+          "Value": 0
+        },
+        {
+          "DataType": 6,
+          "Value": 2335
+        }
+      ]
+    }
   }
-}
+]
