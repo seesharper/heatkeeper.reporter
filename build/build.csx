@@ -1,5 +1,5 @@
 #!/usr/bin/env dotnet-script
-#load "nuget:Dotnet.Build, 0.13.0"
+#load "nuget:Dotnet.Build, 0.13.1"
 #load "nuget:dotnet-steps, 0.0.2"
 
 
