@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run build script
-        run: build/build.sh
+        run: cd build && build/build.sh
         env: # Or as an environment variable
           GITHUB_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           IS_SECURE_BUILDENVIRONMENT: ${{ secrets.IS_SECURE_BUILDENVIRONMENT }}
