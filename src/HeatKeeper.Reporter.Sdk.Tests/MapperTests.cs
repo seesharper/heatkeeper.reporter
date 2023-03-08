@@ -56,13 +56,13 @@ namespace HeatKeeper.Reporter.Sdk.Tests
         }
 
 
-
-        public async Task ShouldStartReporter()
-        {
-            await new ReporterHost()
-                .AddReporter(new HANReporter().WithSerialPort("dfs").WithPublishIntervall(new TimeSpan(0, 10, 0)))
-                .AddReporter(new RTL433Reporter().AddSensor(Sensors.Acurite606TX).WithPublishIntervall(new TimeSpan(0, 10, 0)))
-                .Start();
-        }
+        // [Fact]
+        // public async Task ShouldStartReporter()
+        // {
+        //     await new ReporterHost()
+        //         .AddReporter(new HANReporter().WithSerialPort("dfs").WithPublishInterval(new TimeSpan(0, 10, 0)))
+        //         .AddReporter(new RTL433Reporter().AddSensor(Sensors.Acurite606TX).WithPublishInterval(new TimeSpan(0, 10, 0)))
+        //         .Start();
+        // }
     }
 }

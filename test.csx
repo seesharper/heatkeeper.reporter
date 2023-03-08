@@ -1,5 +1,5 @@
 
-#r "nuget:System.Text.Json, 4.7.1"
+#r "nuget:System.Text.Json, 7.0.2"
 using System;
 using System.Collections.Concurrent;
 using System.Globalization;

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace HeatKeeper.Reporter.Sdk
@@ -15,32 +16,23 @@ namespace HeatKeeper.Reporter.Sdk
         // Contains the last measurements per sensor
         private readonly ConcurrentDictionary<string, Measurement[]> cache = new ConcurrentDictionary<string, Measurement[]>();
 
-        private readonly HttpClient httpClient = new HttpClient();
-
         internal override async Task Start()
         {
-            httpClient.BaseAddress = new Uri(this.EndpointConfiguration.Url);
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.EndpointConfiguration.ApiKey);
-            await Task.WhenAny(StartRtl(), PublishMeasurements());
+            await StartRtl();
         }
 
-
-        private async Task PublishMeasurements()
+        public override async Task PublishMeasurements(HttpClient httpClient, CancellationToken cancellationToken)
         {
-            while (true)
+            foreach (var item in cache)
             {
-                foreach (var item in cache)
+                Console.WriteLine($"Publishing {item.Value.Count()} measurements");
+                var content = new JsonContent(item.Value);
+                Console.WriteLine(content);
+                var response = await httpClient.PostAsync("api/measurements", content);
+                if (!response.IsSuccessStatusCode)
                 {
-                    Console.WriteLine($"Publishing {item.Value.Count()} measurements");
-                    var content = new JsonContent(item.Value);
-                    Console.WriteLine(content);
-                    var response = await httpClient.PostAsync("api/measurements", content);
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        Console.Error.WriteLine("Failed to post HAN measurements");
-                    }
+                    Console.Error.WriteLine("Failed to post HAN measurements");
                 }
-                await Task.Delay(publishIntervall);
             }
         }
 
