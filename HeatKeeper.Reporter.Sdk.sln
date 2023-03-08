@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeatKeeper.Reporter.Sdk", "HeatKeeper.Reporter.Sdk\HeatKeeper.Reporter.Sdk.csproj", "{B3F533BB-BB1B-46EF-9E9E-54147D6E861E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeatKeeper.Reporter.Sdk", "src/HeatKeeper.Reporter.Sdk\HeatKeeper.Reporter.Sdk.csproj", "{B3F533BB-BB1B-46EF-9E9E-54147D6E861E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeatKeeper.Reporter.Sdk.Tests", "HeatKeeper.Reporter.Sdk.Tests\HeatKeeper.Reporter.Sdk.Tests.csproj", "{E945EB3F-1755-46E8-ACBB-EE32C3F0CB7D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeatKeeper.Reporter.Sdk.Tests", "src/HeatKeeper.Reporter.Sdk.Tests\HeatKeeper.Reporter.Sdk.Tests.csproj", "{E945EB3F-1755-46E8-ACBB-EE32C3F0CB7D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
