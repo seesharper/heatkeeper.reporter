@@ -60,11 +60,11 @@ namespace HeatKeeper.Reporter.Sdk
                     await reporter.Start();
                 }
 
-
+                sc.AddHostedService<JanitorHostedService>();
+                sc.AddHostedService<ReportersHostedService>(sp => new ReportersHostedService(reporters.ToArray()));
 
             });
             hostBuilder.Build().Run();
-
 
             // await Task.WhenAll(reporters.Select(r => r.Start()));
             // Console.Error.WriteLine("ReporterHost exited");
