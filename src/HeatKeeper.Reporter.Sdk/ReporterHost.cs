@@ -34,7 +34,7 @@ namespace HeatKeeper.Reporter.Sdk
         public async Task Start()
         {
             var hostBuilder = Host.CreateDefaultBuilder();
-            hostBuilder.ConfigureServices(sc =>
+            hostBuilder.ConfigureServices(async sc =>
             {
                 sc.AddJanitor((sp, janitor) =>
                 {
@@ -57,14 +57,9 @@ namespace HeatKeeper.Reporter.Sdk
                         client.BaseAddress = new Uri(endpointConfiguration.Url);
                         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", endpointConfiguration.ApiKey);
                     });
+                    await reporter.Start();
                 }
 
-
-                // sc.AddHttpClient(client =>
-                // {
-                //     client.BaseAddress = new Uri(endpointConfiguration.Url);
-                //     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", endpointConfiguration.ApiKey);
-                // });
 
 
             });
