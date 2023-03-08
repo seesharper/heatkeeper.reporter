@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace HeatKeeper.Reporter.Sdk
@@ -12,26 +13,22 @@ namespace HeatKeeper.Reporter.Sdk
     {
         internal abstract Task Start();
 
-        protected TimeSpan publishIntervall;
+        public TimeSpan PublishInterval { get; set; }
 
         internal EndpointConfiguration EndpointConfiguration { get; set; }
 
-        public Reporter WithPublishIntervall(TimeSpan publishIntervall)
+        public Reporter WithPublishInterval(TimeSpan publishInterval)
         {
-            this.publishIntervall = publishIntervall;
+            PublishInterval = publishInterval;
             return this;
         }
 
+        public abstract Task PublishMeasurements(HttpClient httpClient, CancellationToken cancellationToken);
     }
-
-
-
 
 
     public class HANReporter : Reporter
     {
-
-        private readonly HttpClient httpClient = new HttpClient();
 
         private ConcurrentQueue<Measurement[]> queue = new ConcurrentQueue<Measurement[]>();
 
@@ -39,9 +36,7 @@ namespace HeatKeeper.Reporter.Sdk
 
         internal override async Task Start()
         {
-            httpClient.BaseAddress = new Uri(this.EndpointConfiguration.Url);
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.EndpointConfiguration.ApiKey);
-            await Task.WhenAny(StartHANReader(), PublishMeasurements());
+            await StartHANReader();
         }
 
         public HANReporter WithSerialPort(string serialPort)
@@ -50,24 +45,19 @@ namespace HeatKeeper.Reporter.Sdk
             return this;
         }
 
-        private async Task PublishMeasurements()
+        public override async Task PublishMeasurements(HttpClient httpClient, CancellationToken cancellationToken)
         {
-            while (true)
+            var allMeasurements = new List<Measurement>();
+            while (queue.TryDequeue(out var measurements))
             {
-                var allmeasurements = new List<Measurement>();
-                while (queue.TryDequeue(out var measurements))
-                {
-                    allmeasurements.AddRange(measurements);
-                }
-                var content = new JsonContent(allmeasurements.ToArray());
-                Console.WriteLine($"Publishing {allmeasurements.Count} measurements");
-                var response = await httpClient.PostAsync("api/measurements", content);
-                if (!response.IsSuccessStatusCode)
-                {
-                    Console.Error.WriteLine("Failed to post HAN measurements");
-                }
-
-                await Task.Delay(publishIntervall);
+                allMeasurements.AddRange(measurements);
+            }
+            var content = new JsonContent(allMeasurements.ToArray());
+            Console.WriteLine($"Publishing {allMeasurements.Count} measurements");
+            var response = await httpClient.PostAsync("api/measurements", content);
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.Error.WriteLine("Failed to post HAN measurements");
             }
         }
 
