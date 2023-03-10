@@ -57,7 +57,6 @@ namespace HeatKeeper.Reporter.Sdk
                         client.BaseAddress = new Uri(endpointConfiguration.Url);
                         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", endpointConfiguration.ApiKey);
                     });
-                    await reporter.Start();
                 }
 
                 sc.AddHostedService<JanitorHostedService>();
