@@ -6,3 +6,8 @@ https://www.kjell.com/no/produkter/data/raspberry-pi/raspberry-pi-chassi-for-din
 
 
 https://bitfoster.com/how-to-fix-inrelease-changed-its-suite-value-from-stable-to-oldstable/
+
+
+
+
+https://github.com/dotnet/sdk/issues/28971
