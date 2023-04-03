@@ -6,9 +6,12 @@
     {
       "label": "build",
       "command": "dotnet",
-      "args": ["build", "/property:GenerateFullPaths=true"],
+      "args": [
+        "build",
+        "/property:GenerateFullPaths=true"
+      ],
       "options": {
-        "cwd": "${workspaceFolder}/src"
+        "cwd": "${workspaceFolder}"
       },
       "type": "shell",
       "group": "build",
@@ -20,9 +23,13 @@
     {
       "label": "rebuild",
       "command": "dotnet",
-      "args": ["build", "--no-incremental", "/property:GenerateFullPaths=true"],
+      "args": [
+        "build",
+        "--no-incremental",
+        "/property:GenerateFullPaths=true"
+      ],
       "options": {
-        "cwd": "${workspaceFolder}/src"
+        "cwd": "${workspaceFolder}"
       },
       "type": "shell",
       "group": "build",
@@ -36,7 +43,11 @@
       "label": "test",
       "command": "dotnet",
       "type": "process",
-      "args": ["script", "${workspaceFolder}/build/build.csx", "test"],
+      "args": [
+        "script",
+        "${workspaceFolder}/build/build.csx",
+        "test"
+      ],
       "problemMatcher": "$msCompile",
       "group": {
         "kind": "test",
@@ -55,7 +66,11 @@
       "label": "pack",
       "command": "dotnet",
       "type": "process",
-      "args": ["script", "${workspaceFolder}/build/build.csx", "pack"],
+      "args": [
+        "script",
+        "${workspaceFolder}/build/build.csx",
+        "pack"
+      ],
       "problemMatcher": "$msCompile",
       "group": {
         "kind": "build"

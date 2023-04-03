@@ -16,7 +16,7 @@ namespace HeatKeeper.Reporter.Sdk
             foreach (var mapping in sensor.Mappings)
             {
                 double value = payload.GetProperty(mapping.PropertyName).GetDouble();
-                var measurement = new Measurement(id, mapping.MeasurementType, RetentionPolicy.Day, mapping.ConvertFunction(value), DateTime.UtcNow);
+                var measurement = new Measurement($"{sensor.Prefix}{id}", mapping.MeasurementType, RetentionPolicy.Day, mapping.ConvertFunction(value), DateTime.UtcNow);
                 result.Add(measurement);
             }
 

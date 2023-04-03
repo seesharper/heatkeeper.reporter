@@ -13,7 +13,7 @@ namespace HeatKeeper.Reporter.Sdk.Tests
         {
             var sensorData = new ResourceBuilder().AddAssembly(typeof(MapperTests).Assembly).Build<ISensorData>();
             var document = JsonDocument.Parse(sensorData.Acurite606TX);
-            var measurements = new MeasurementFactory().CreateMeasurements(document.RootElement, Sensors.Acurite606TX);
+            var measurements = new MeasurementFactory().CreateMeasurements(document.RootElement, Sensors.Acurite606TX("A"));
             measurements.Should().Contain(m => m.Value == 22.2);
         }
 
@@ -22,7 +22,7 @@ namespace HeatKeeper.Reporter.Sdk.Tests
         {
             var sensorData = new ResourceBuilder().AddAssembly(typeof(MapperTests).Assembly).Build<ISensorData>();
             var document = JsonDocument.Parse(sensorData.AcuriteTower);
-            var measurements = new MeasurementFactory().CreateMeasurements(document.RootElement, Sensors.AcuriteTower);
+            var measurements = new MeasurementFactory().CreateMeasurements(document.RootElement, Sensors.AcuriteTower("AT"));
             measurements.Should().Contain(m => m.Value == 4.8 && m.MeasurementType == MeasurementType.Temperature);
             measurements.Should().Contain(m => m.Value == 75.0 && m.MeasurementType == MeasurementType.Humidity);
         }
@@ -32,7 +32,7 @@ namespace HeatKeeper.Reporter.Sdk.Tests
         {
             var sensorData = new ResourceBuilder().AddAssembly(typeof(MapperTests).Assembly).Build<ISensorData>();
             var document = JsonDocument.Parse(sensorData.FineoffsetWH2);
-            var measurements = new MeasurementFactory().CreateMeasurements(document.RootElement, Sensors.FineOffsetWH2);
+            var measurements = new MeasurementFactory().CreateMeasurements(document.RootElement, Sensors.FineOffsetWH2("FO"));
             measurements.Should().Contain(m => m.Value == 20.1 && m.MeasurementType == MeasurementType.Temperature);
             measurements.Should().Contain(m => m.Value == 40.0 && m.MeasurementType == MeasurementType.Humidity);
         }
