@@ -13,5 +13,11 @@ namespace HeatKeeper.Reporter.Sdk.Tests
         string Kaifka_MA304H3E_List2 { get; }
 
         string Kaifka_MA304H3E_List3 { get; }
+
+        string ShellyPlusHT_Temperature { get; }
+
+        string ShellyPlusHT_Humidity { get; }
+
+        string ShellyPlusHT_DevicePower { get; }
     }
 }

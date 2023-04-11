@@ -1,7 +1,9 @@
 using System;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using FluentAssertions;
+using MQTTnet;
 using ResourceReader;
 using Xunit;
 namespace HeatKeeper.Reporter.Sdk.Tests
@@ -54,6 +56,52 @@ namespace HeatKeeper.Reporter.Sdk.Tests
             var measurements = new KaifaMeasurementsFactory().CreateMeasurements(document.RootElement);
             measurements.Length.Should().Be(7);
         }
+
+        [Fact]
+        public async Task ShouldMapShellyPlusTemperature()
+        {
+            var sensorData = new ResourceBuilder().AddAssembly(typeof(MapperTests).Assembly).Build<ISensorData>();
+            var document = JsonDocument.Parse(sensorData.ShellyPlusHT_Temperature);
+            MqttApplicationMessage message = new()
+            {
+                Payload = Encoding.UTF8.GetBytes(sensorData.ShellyPlusHT_Temperature),
+                Topic = "shelly/plus-ht/home/kitchen/status/temperature:0"
+            };
+
+            var measurements = await MqttSensors.ShellyPlusHT().HandleMessage(message);
+            measurements.Should().Contain(m => m.Value == 24.5 && m.MeasurementType == MeasurementType.Temperature && m.SensorId == "shelly/plus-ht/home/kitchen");
+        }
+
+        [Fact]
+        public async Task ShouldMapShellyPlusHumidity()
+        {
+            var sensorData = new ResourceBuilder().AddAssembly(typeof(MapperTests).Assembly).Build<ISensorData>();
+            var document = JsonDocument.Parse(sensorData.ShellyPlusHT_Humidity);
+            MqttApplicationMessage message = new()
+            {
+                Payload = Encoding.UTF8.GetBytes(sensorData.ShellyPlusHT_Humidity),
+                Topic = "shelly/plus-ht/home/kitchen/status/humidity:0"
+            };
+
+            var measurements = await MqttSensors.ShellyPlusHT().HandleMessage(message);
+            measurements.Should().Contain(m => m.Value == 33.4 && m.MeasurementType == MeasurementType.Humidity && m.SensorId == "shelly/plus-ht/home/kitchen");
+        }
+
+        [Fact]
+        public async Task ShouldMapShellyPlusDevicePower()
+        {
+            var sensorData = new ResourceBuilder().AddAssembly(typeof(MapperTests).Assembly).Build<ISensorData>();
+            var document = JsonDocument.Parse(sensorData.ShellyPlusHT_DevicePower);
+            MqttApplicationMessage message = new()
+            {
+                Payload = Encoding.UTF8.GetBytes(sensorData.ShellyPlusHT_DevicePower),
+                Topic = "shelly/plus-ht/home/kitchen/status/devicepower:0"
+            };
+
+            var measurements = await MqttSensors.ShellyPlusHT().HandleMessage(message);
+            measurements.Should().Contain(m => m.Value == 100 && m.MeasurementType == MeasurementType.BatteryLevel && m.SensorId == "shelly/plus-ht/home/kitchen");
+        }
+
 
 
         // [Fact]

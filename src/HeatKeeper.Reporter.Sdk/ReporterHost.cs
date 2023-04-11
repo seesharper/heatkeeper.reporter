@@ -34,7 +34,7 @@ namespace HeatKeeper.Reporter.Sdk
         public async Task Start()
         {
             var hostBuilder = Host.CreateDefaultBuilder();
-            hostBuilder.ConfigureServices(async sc =>
+            _ = hostBuilder.ConfigureServices(async sc =>
             {
                 sc.AddJanitor((sp, janitor) =>
                 {
@@ -60,7 +60,7 @@ namespace HeatKeeper.Reporter.Sdk
                 }
 
                 sc.AddHostedService<JanitorHostedService>();
-                sc.AddHostedService<ReportersHostedService>(sp => new ReportersHostedService(reporters.ToArray()));
+                sc.AddHostedService(sp => new ReportersHostedService(reporters.ToArray()));
 
             });
             hostBuilder.Build().Run();

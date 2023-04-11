@@ -22,6 +22,7 @@
     <PackageReference Include="System.Text.Json" Version="7.0.2" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="7.0" />
+    <PackageReference Include="MQTTnet.Extensions.ManagedClient" Version="4.1.4.563" />
     <PackageReference Include="Janitor" Version="1.2.0" />
   </ItemGroup>
 </Project>

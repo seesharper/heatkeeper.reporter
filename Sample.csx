@@ -10,6 +10,6 @@ string hanReaderSerialPort = "";
 
 await new ReporterHost()
         .WithHeatKeeperEndpoint(heatKeeperUrl, apiKey)
-        .AddReporter(new RTL433Reporter().AddSensor(Sensors.Acurite606TX("A")).AddSensor(Sensors.AcuriteTower).AddSensor(Sensors.FineOffsetWH2).WithPublishInterval(new TimeSpan(0, 10, 0)))
+        .AddReporter(new RTL433Reporter().AddSensor(Sensors.Acurite606TX("A")).AddSensor(Sensors.AcuriteTower("HOME_AC_FI")).AddSensor(Sensors.FineOffsetWH2("HOME_FI_")).WithPublishInterval(new TimeSpan(0, 10, 0)))
         .AddReporter(new HANReporter().WithSerialPort(hanReaderSerialPort).WithPublishInterval(new TimeSpan(0, 0, 10)))
         .Start();
