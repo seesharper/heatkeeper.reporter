@@ -19,5 +19,7 @@ namespace HeatKeeper.Reporter.Sdk.Tests
         string ShellyPlusHT_Humidity { get; }
 
         string ShellyPlusHT_DevicePower { get; }
+
+        string ShellyPlusHT_FullStatus { get; }
     }
 }

@@ -1,0 +1,47 @@
+@shelly = 192.168.10.162
+
+### Get Status
+POST http://{{shelly}}/rpc
+content-type: application/json
+
+{"id":1, "method":"Mqtt.GetStatus"}
+
+### Get Config
+
+POST http://{{shelly}}/rpc
+content-type: application/json
+
+{"id":1, "method":"Mqtt.GetConfig"}
+
+
+### Enable MQTT
+
+POST http://{{shelly}}/rpc
+content-type: application/json
+
+{
+    "id": 1,
+    "method": "Mqtt.SetConfig",
+    "params": {
+        "config": {
+            "enable": true,
+            "server": "139.162.230.128",
+            "client_id": "shelly/plus-ht/hjemme/bryggeri",
+            "topic_prefix": "shelly/plus-ht/hjemme/bryggeri",
+            "user": "heatkeeper",
+            "pass":"overintermoduluasjonsforvregning",
+
+        }
+    }
+}
+
+### Reboot
+
+POST http://{{shelly}}/rpc
+content-type: application/json
+
+{"id":1, "method":"Shelly.Reboot"}
+
+
+### 
+POST http://192.168.10.162/rpc/Temperature.GetStatus?id=0
