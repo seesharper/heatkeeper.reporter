@@ -111,6 +111,10 @@ export MQTT_SERVER=139.162.230.128
 export MQTT_USER="heatkeeper"
 ```
 
+```
+mosquitto_sub -v -u heatkeeper -P [password] -h 139.162.230.128 -p 1883 -t shelly/plus-ht/hjemme/bryggeri/events/rpc
+```
+
 
 
 
