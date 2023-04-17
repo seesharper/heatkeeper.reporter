@@ -1,0 +1,64 @@
+{
+    "src": "shellyplusht-08b61fcb6c14",
+    "dst": "shelly/plus-ht/hjemme/bryggeri/events",
+    "method": "NotifyFullStatus",
+    "params": {
+        "ts": 1681484190.65,
+        "ble": {},
+        "cloud": {
+            "connected": false
+        },
+        "devicepower:0": {
+            "id": 0,
+            "battery": {
+                "V": 6.92,
+                "percent": 100
+            },
+            "external": {
+                "present": false
+            }
+        },
+        "ht_ui": {},
+        "humidity:0": {
+            "id": 0,
+            "rh": 31.3
+        },
+        "mqtt": {
+            "connected": true
+        },
+        "sys": {
+            "mac": "08B61FCB6C14",
+            "restart_required": false,
+            "time": null,
+            "unixtime": null,
+            "uptime": 1,
+            "ram_size": 249620,
+            "ram_free": 145988,
+            "fs_size": 458752,
+            "fs_free": 118784,
+            "cfg_rev": 9,
+            "kvs_rev": 0,
+            "webhook_rev": 0,
+            "available_updates": {},
+            "wakeup_reason": {
+                "boot": "deepsleep_wake",
+                "cause": "status_update"
+            },
+            "wakeup_period": 7200
+        },
+        "temperature:0": {
+            "id": 0,
+            "tC": 24.4,
+            "tF": 76.0
+        },
+        "wifi": {
+            "sta_ip": "192.168.10.162",
+            "status": "got ip",
+            "ssid": "Fiber24",
+            "rssi": -62
+        },
+        "ws": {
+            "connected": false
+        }
+    }
+}

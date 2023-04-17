@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -105,49 +106,29 @@ public static partial class MqttSensors
     {
         return new MqttSensor("shelly/plus-ht/#", async applicationMessage =>
         {
-            if (applicationMessage.Topic.Contains("humidity", StringComparison.OrdinalIgnoreCase))
-            {
-                return new Measurement[] { ReadHumidity(applicationMessage.Topic, applicationMessage.ConvertPayloadToString()) };
-            }
+            JsonDocument document = JsonDocument.Parse(applicationMessage.ConvertPayloadToString());
 
-            if (applicationMessage.Topic.Contains("temperature", StringComparison.OrdinalIgnoreCase))
+            if (applicationMessage.Topic.EndsWith("/events/rpc", ignoreCase: true, culture: null))
             {
-                return new Measurement[] { ReadTemperature(applicationMessage.Topic, applicationMessage.ConvertPayloadToString()) };
-            }
+                var unixTime = document.RootElement.GetProperty("params").GetProperty("ts").GetDouble();
+                var timestamp = DateTimeOffset.FromUnixTimeSeconds((long)unixTime).UtcDateTime;
 
-            if (applicationMessage.Topic.Contains("devicepower", StringComparison.OrdinalIgnoreCase))
-            {
-                return new Measurement[] { ReadBatteryLevel(applicationMessage.Topic, applicationMessage.ConvertPayloadToString()) };
+
+                if (document.RootElement.GetProperty("method").GetString().Equals("NotifyFullStatus", StringComparison.OrdinalIgnoreCase))
+                {
+                    var temperature = document.RootElement.GetProperty("params").GetProperty("temperature:0").GetProperty("tC").GetDouble();
+                    var humidity = document.RootElement.GetProperty("params").GetProperty("humidity:0").GetProperty("rh").GetDouble();
+                    var batteryLevel = document.RootElement.GetProperty("params").GetProperty("devicepower:0").GetProperty("battery").GetProperty("percent").GetDouble();
+                    var sensorId = applicationMessage.Topic.Replace("/events/rpc", "");
+
+                    var temperatureMeasurement = new Measurement(sensorId, MeasurementType.Temperature, RetentionPolicy.Day, temperature, timestamp);
+                    var humidityMeasurement = new Measurement(sensorId, MeasurementType.Humidity, RetentionPolicy.Day, humidity, timestamp);
+                    var batteryLevelMeasurement = new Measurement(sensorId, MeasurementType.BatteryLevel, RetentionPolicy.Day, batteryLevel, timestamp);
+                    return new Measurement[] { temperatureMeasurement, humidityMeasurement, batteryLevelMeasurement };
+                }
             }
 
             throw new ArgumentOutOfRangeException("applicationMessage.Topic", applicationMessage.Topic, "Unknown topic");
         });
-
-        static Measurement ReadTemperature(string topic, string payload)
-        {
-            JsonDocument document = JsonDocument.Parse(payload);
-            var temperature = document.RootElement.GetProperty("tC").GetDouble();
-            var sensorId = MyRegex().Match(topic).Groups[1].Value;
-            return new Measurement(sensorId, MeasurementType.Temperature, RetentionPolicy.Day, temperature, DateTime.UtcNow);
-        }
-
-        static Measurement ReadHumidity(string topic, string payload)
-        {
-            JsonDocument document = JsonDocument.Parse(payload);
-            var humidity = document.RootElement.GetProperty("rh").GetDouble();
-            var sensorId = MyRegex().Match(topic).Groups[1].Value;
-            return new Measurement(sensorId, MeasurementType.Humidity, RetentionPolicy.Day, humidity, DateTime.UtcNow);
-        }
-
-        static Measurement ReadBatteryLevel(string topic, string payload)
-        {
-            JsonDocument document = JsonDocument.Parse(payload);
-            var batteryLevel = document.RootElement.GetProperty("battery").GetProperty("percent").GetDouble();
-            var sensorId = MyRegex().Match(topic).Groups[1].Value;
-            return new Measurement(sensorId, MeasurementType.BatteryLevel, RetentionPolicy.Day, batteryLevel, DateTime.UtcNow);
-        }
     }
-
-    [GeneratedRegex(@"^(.*)\/status.*$")]
-    private static partial Regex MyRegex();
 }

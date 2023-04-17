@@ -98,3 +98,26 @@ new ReporterHost()
 	.AddReporter(new RTL433Reporter().AddSensor)
 
 ```
+
+## Configure Shelly PlusHT 
+
+Environment variables
+
+```shell
+export SHELLY=192.168.10.162
+export MQTT_PASSWORD="overintermoduluasjonsforvregning"
+export MQTT_PORT=1883
+export MQTT_SERVER=139.162.230.128
+export MQTT_USER="heatkeeper"
+```
+
+```
+mosquitto_sub -v -u heatkeeper -P [password] -h 139.162.230.128 -p 1883 -t shelly/plus-ht/hjemme/bryggeri/events/rpc
+```
+
+
+
+
+
+
+
