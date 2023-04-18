@@ -60,7 +60,7 @@ public class MqttReporter : Reporter
         var options = new ManagedMqttClientOptionsBuilder()
             .WithAutoReconnectDelay(TimeSpan.FromSeconds(5))
             .WithClientOptions(new MqttClientOptionsBuilder()
-                .WithClientId("HeatKeeper")
+                .WithClientId("HeatKeeper.Reporter")
                 .WithCredentials(_brokerUser, _brokerPassword)
                 .WithTcpServer(_brokerTcpAddress, 1883)
                 .Build())
@@ -107,7 +107,7 @@ public static partial class MqttSensors
         return new MqttSensor("shelly/plus-ht/#", async applicationMessage =>
         {
             JsonDocument document = JsonDocument.Parse(applicationMessage.ConvertPayloadToString());
-
+            Console.WriteLine(document.RootElement.ToString());
             if (applicationMessage.Topic.EndsWith("/events/rpc", ignoreCase: true, culture: null))
             {
                 var unixTime = document.RootElement.GetProperty("params").GetProperty("ts").GetDouble();
@@ -128,7 +128,7 @@ public static partial class MqttSensors
                 }
             }
 
-            throw new ArgumentOutOfRangeException("applicationMessage.Topic", applicationMessage.Topic, "Unknown topic");
+            return Array.Empty<Measurement>();
         });
     }
 }
