@@ -11,3 +11,8 @@ https://bitfoster.com/how-to-fix-inrelease-changed-its-suite-value-from-stable-t
 
 
 https://github.com/dotnet/sdk/issues/28971
+
+
+
+MQttNet ClientID should be unique
+https://github.com/dotnet/MQTTnet/issues/289
