@@ -35,7 +35,7 @@ public class MqttReporter : Reporter
         if (allMeasurements.Count == 0)
         {
             Console.WriteLine("No measurements to publish");
-            return
+            return;
         }
 
         var content = new JsonContent(allMeasurements.ToArray());
