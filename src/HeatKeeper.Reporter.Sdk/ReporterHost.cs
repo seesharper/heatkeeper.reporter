@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
@@ -8,12 +7,11 @@ using System.Threading.Tasks;
 using Janitor;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Http;
 namespace HeatKeeper.Reporter.Sdk
 {
     public class ReporterHost
     {
-        private EndpointConfiguration endpointConfiguration = new();
+        private readonly EndpointConfiguration endpointConfiguration = new();
 
         private List<Reporter> reporters = new();
 

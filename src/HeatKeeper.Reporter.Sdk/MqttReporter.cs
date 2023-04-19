@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using MQTTnet;
@@ -14,7 +12,9 @@ using MQTTnet.Extensions.ManagedClient;
 
 namespace HeatKeeper.Reporter.Sdk;
 
-
+/// <summary>
+/// A reporter that reads measurements from MQTT and publishes them to the HeatKeeper API.
+/// </summary>
 public class MqttReporter : Reporter
 {
     private string _brokerTcpAddress;
@@ -32,6 +32,12 @@ public class MqttReporter : Reporter
         {
             allMeasurements.AddRange(measurements);
         }
+        if (allMeasurements.Count == 0)
+        {
+            Console.WriteLine("No measurements to publish");
+            return
+        }
+
         var content = new JsonContent(allMeasurements.ToArray());
         Console.WriteLine($"Publishing {allMeasurements.Count} measurements");
         var response = await httpClient.PostAsync("api/measurements", content, cancellationToken);
@@ -41,12 +47,24 @@ public class MqttReporter : Reporter
         }
     }
 
+    /// <summary>
+    /// Adds a new <see cref="MqttSensor"/> to the reporter.
+    /// </summary>
+    /// <param name="mqttSensor">The <see cref="MqttSensor"/> to be added.</param>
+    /// <returns></returns>
     public MqttReporter AddSensor(MqttSensor mqttSensor)
     {
         _sensors.Add(mqttSensor);
         return this;
     }
 
+    /// <summary>
+    /// Sets the MQTT broker options.
+    /// </summary>
+    /// <param name="brokerTcpAddress">The tcp address of the broker. </param>
+    /// <param name="brokerUser">The username used to connect to the broker.</param>
+    /// <param name="brokerPassword">The password used to connect to the broker.</param>
+    /// <returns>The <see cref="MqttReporter"/> for chaining calls.</returns>
     public MqttReporter WithMqttBrokerOptions(string brokerTcpAddress, string brokerUser, string brokerPassword)
     {
         _brokerTcpAddress = brokerTcpAddress;
@@ -71,7 +89,6 @@ public class MqttReporter : Reporter
         var filters = _sensors.Select(s => new MqttTopicFilterBuilder().WithTopic(s.Topic).Build()).ToList();
         await managedClient.SubscribeAsync(filters);
 
-
         managedClient.ApplicationMessageReceivedAsync += async e =>
         {
             var sensor = _sensors.Single(s => e.ApplicationMessage.Topic.StartsWith(s.Topic.Replace("#", "")));
@@ -82,18 +99,35 @@ public class MqttReporter : Reporter
     }
 }
 
+
+/// <summary>
+/// Represents a sensor that can be read from MQTT.
+/// </summary>
 public class MqttSensor
 {
     private readonly Func<MqttApplicationMessage, Task<Measurement[]>> _payloadHandler;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MqttSensor"/> class.
+    /// </summary>
+    /// <param name="topic">The topic to subscribe to.</param>
+    /// <param name="payloadHandler">The function used to handle the <see cref="MqttApplicationMessage"/>.</param>
     public MqttSensor(string topic, Func<MqttApplicationMessage, Task<Measurement[]>> payloadHandler)
     {
         Topic = topic;
         _payloadHandler = payloadHandler;
     }
 
+    /// <summary>
+    /// Gets the subscription topic.
+    /// </summary>
     public string Topic { get; }
 
+    /// <summary>
+    /// Handles the <paramref name="applicationMessage"/> and returns the measurements.
+    /// </summary>
+    /// <param name="applicationMessage">The <see cref="MqttApplicationMessage"/> to be handled.</param>
+    /// <returns>A list of measurements.</returns>
     public async Task<Measurement[]> HandleMessage(MqttApplicationMessage applicationMessage)
     {
         return await _payloadHandler(applicationMessage);
@@ -102,6 +136,10 @@ public class MqttSensor
 
 public static partial class MqttSensors
 {
+    /// <summary>
+    /// Creates a new <see cref="MqttSensor"/> for the Shelly Plus HT.
+    /// </summary>
+    /// <returns>A new MqttSensor for the Shelly Plus HT.</returns>
     public static MqttSensor ShellyPlusHT()
     {
         return new MqttSensor("shelly/plus-ht/#", async applicationMessage =>
