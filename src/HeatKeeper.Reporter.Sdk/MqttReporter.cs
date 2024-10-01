@@ -169,4 +169,22 @@ public static partial class MqttSensors
             return Array.Empty<Measurement>();
         });
     }
+
+    public static MqttSensor DS18B20()
+    {
+        return new MqttSensor("tele/DS18B20/SENSOR", async applicationMessage =>
+        {
+            JsonDocument document = JsonDocument.Parse(applicationMessage.ConvertPayloadToString());
+            Console.WriteLine(document.RootElement.ToString());
+
+
+            var temperature = document.RootElement.GetProperty("DS18B20").GetProperty("Temperature").GetDouble();
+            var timeStamp = DateTime.Parse(document.RootElement.GetProperty("Time").GetString());
+            var utcTimeStamp = DateTime.SpecifyKind(timeStamp, DateTimeKind.Utc);
+            var sensorId = document.RootElement.GetProperty("DS18B20").GetProperty("Id").GetString();
+
+            var temperatureMeasurement = new Measurement(sensorId, MeasurementType.Temperature, RetentionPolicy.Day, temperature, utcTimeStamp);
+            return [temperatureMeasurement];
+        });
+    }
 }
