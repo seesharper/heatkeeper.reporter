@@ -73,5 +73,20 @@ namespace HeatKeeper.Reporter.Sdk.Tests
             measurements.Should().Contain(m => m.Value == 31.3 && m.MeasurementType == MeasurementType.Humidity && m.SensorId == "shelly/plus-ht/home/kitchen");
             measurements.Should().Contain(m => m.Value == 100 && m.MeasurementType == MeasurementType.BatteryLevel && m.SensorId == "shelly/plus-ht/home/kitchen");
         }
+
+        [Fact]
+        public async Task ShouldMapDS18B20()
+        {
+            var sensorData = new ResourceBuilder().AddAssembly(typeof(MapperTests).Assembly).Build<ISensorData>();
+            var document = JsonDocument.Parse(sensorData.Tasmota_DS18B20);
+            MqttApplicationMessage message = new()
+            {
+                Payload = Encoding.UTF8.GetBytes(sensorData.Tasmota_DS18B20),
+                Topic = "tele/DS18B20/SENSOR"
+            };
+
+            var measurements = await MqttSensors.DS18B20().HandleMessage(message);
+            measurements.Should().Contain(m => m.Value == 20.3 && m.MeasurementType == MeasurementType.Temperature && m.SensorId == "00000F9DA02D");
+        }
     }
 }

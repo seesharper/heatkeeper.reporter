@@ -21,5 +21,7 @@ namespace HeatKeeper.Reporter.Sdk.Tests
         string ShellyPlusHT_DevicePower { get; }
 
         string ShellyPlusHT_FullStatus { get; }
+
+        string Tasmota_DS18B20 { get; }
     }
 }

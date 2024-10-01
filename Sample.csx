@@ -1,6 +1,6 @@
 #! /usr/bin/env dotnet-script
 #r "/Users/bernhardrichter/GitHub/heatkeeper.reporter/src/HeatKeeper.Reporter.Sdk/bin/Debug/net7.0/HeatKeeper.Reporter.Sdk.dll"
-#r "nuget: MQTTnet.Extensions.ManagedClient, 4.1.4.563"
+#r "nuget: MQTTnet.Extensions.ManagedClient, 4.3.7.1207"
 
 using HeatKeeper.Reporter.Sdk;
 
