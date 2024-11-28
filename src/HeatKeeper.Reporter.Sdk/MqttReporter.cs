@@ -148,9 +148,7 @@ public static partial class MqttSensors
             Console.WriteLine(document.RootElement.ToString());
             if (applicationMessage.Topic.EndsWith("/events/rpc", ignoreCase: true, culture: null))
             {
-                var unixTime = document.RootElement.GetProperty("params").GetProperty("ts").GetDouble();
-                var timestamp = DateTimeOffset.FromUnixTimeSeconds((long)unixTime).UtcDateTime;
-
+                var timestamp = DateTime.UtcNow;
 
                 if (document.RootElement.GetProperty("method").GetString().Equals("NotifyFullStatus", StringComparison.OrdinalIgnoreCase))
                 {
