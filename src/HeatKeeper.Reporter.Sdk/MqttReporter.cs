@@ -160,6 +160,8 @@ public static partial class MqttSensors
                     var temperatureMeasurement = new Measurement(sensorId, MeasurementType.Temperature, RetentionPolicy.Day, temperature, timestamp);
                     var humidityMeasurement = new Measurement(sensorId, MeasurementType.Humidity, RetentionPolicy.Day, humidity, timestamp);
                     var batteryLevelMeasurement = new Measurement(sensorId, MeasurementType.BatteryLevel, RetentionPolicy.Day, batteryLevel, timestamp);
+                    Console.WriteLine($"Creating measurements with temperature: {temperature}, humidity: {humidity}, battery: {batteryLevel} at {timestamp}");
+
                     return new Measurement[] { temperatureMeasurement, humidityMeasurement, batteryLevelMeasurement };
                 }
             }
