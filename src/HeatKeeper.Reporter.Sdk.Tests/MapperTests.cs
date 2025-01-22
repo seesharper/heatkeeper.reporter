@@ -40,8 +40,20 @@ namespace HeatKeeper.Reporter.Sdk.Tests
         }
 
         [Fact]
-        public void ShouldMap_Kaifka_MA304H3E_List2()
+        public void ShouldMapAmbientWeatherF007TH()
         {
+            var sensorData = new ResourceBuilder().AddAssembly(typeof(MapperTests).Assembly).Build<ISensorData>();
+            var document = JsonDocument.Parse(sensorData.AmbientWeather_F007TH);
+            var measurements = new MeasurementFactory().CreateMeasurements(document.RootElement, Sensors.AmbientWeatherF007TH("AW"));
+            measurements.Should().Contain(m => m.Value == 23.3 && m.MeasurementType == MeasurementType.Temperature);
+            measurements.Should().Contain(m => m.Value == 38.0 && m.MeasurementType == MeasurementType.Humidity);
+            measurements.Should().Contain(m => m.Value == 100 && m.MeasurementType == MeasurementType.BatteryLevel);
+        }
+
+
+        [Fact]
+        public void ShouldMap_Kaifka_MA304H3E_List2()
+        {            
             var sensorData = new ResourceBuilder().AddAssembly(typeof(MapperTests).Assembly).Build<ISensorData>();
             var document = JsonDocument.Parse(sensorData.Kaifka_MA304H3E_List2);
             var measurements = new KaifaMeasurementsFactory().CreateMeasurements(document.RootElement);
