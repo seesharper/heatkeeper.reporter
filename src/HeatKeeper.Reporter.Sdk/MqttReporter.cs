@@ -187,4 +187,30 @@ public static partial class MqttSensors
             return [temperatureMeasurement];
         });
     }
+
+    public static MqttSensor ShellyPlugS()
+    {
+        return new MqttSensor("shellies/plug-s/#", async applicationMessage =>
+        {
+            var topic = applicationMessage.Topic;
+            var payload = applicationMessage.ConvertPayloadToString();
+            var timestamp = DateTime.UtcNow;
+
+            if (topic.EndsWith("/relay/0/energy", StringComparison.OrdinalIgnoreCase))
+            {
+                var sensorId = topic[..^"/relay/0/energy".Length];
+                var energyWh = double.Parse(payload, System.Globalization.CultureInfo.InvariantCulture) / 60.0;
+                return [new Measurement(sensorId, MeasurementType.CumulativePowerImport, RetentionPolicy.Day, energyWh, timestamp)];
+            }
+
+            if (topic.EndsWith("/relay/0/power", StringComparison.OrdinalIgnoreCase))
+            {
+                var sensorId = topic[..^"/relay/0/power".Length];
+                var power = double.Parse(payload, System.Globalization.CultureInfo.InvariantCulture);
+                return [new Measurement(sensorId, MeasurementType.ActivePowerImport, RetentionPolicy.Day, power, timestamp)];
+            }
+
+            return Array.Empty<Measurement>();
+        });
+    }
 }

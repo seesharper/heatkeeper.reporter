@@ -100,5 +100,39 @@ namespace HeatKeeper.Reporter.Sdk.Tests
             var measurements = await MqttSensors.DS18B20().HandleMessage(message);
             measurements.Should().Contain(m => m.Value == 20.3 && m.MeasurementType == MeasurementType.Temperature && m.SensorId == "00000F9DA02D");
         }
+
+        [Fact]
+        public async Task ShouldMapShellyPlugSEnergy()
+        {
+            var sensorData = new ResourceBuilder().AddAssembly(typeof(MapperTests).Assembly).Build<ISensorData>();
+            var fixture = JsonDocument.Parse(sensorData.ShellyPlugS_Energy);
+            var topic = fixture.RootElement.GetProperty("topic").GetString();
+            var payload = fixture.RootElement.GetProperty("payload").GetString();
+            MqttApplicationMessage message = new()
+            {
+                Payload = Encoding.UTF8.GetBytes(payload),
+                Topic = topic
+            };
+
+            var measurements = await MqttSensors.ShellyPlugS().HandleMessage(message);
+            measurements.Should().Contain(m => m.Value == 10853076.0 / 60.0 && m.MeasurementType == MeasurementType.CumulativePowerImport && m.SensorId == "shellies/plug-s/hytta/spisestue");
+        }
+
+        [Fact]
+        public async Task ShouldMapShellyPlugSPower()
+        {
+            var sensorData = new ResourceBuilder().AddAssembly(typeof(MapperTests).Assembly).Build<ISensorData>();
+            var fixture = JsonDocument.Parse(sensorData.ShellyPlugS_Power);
+            var topic = fixture.RootElement.GetProperty("topic").GetString();
+            var payload = fixture.RootElement.GetProperty("payload").GetString();
+            MqttApplicationMessage message = new()
+            {
+                Payload = Encoding.UTF8.GetBytes(payload),
+                Topic = topic
+            };
+
+            var measurements = await MqttSensors.ShellyPlugS().HandleMessage(message);
+            measurements.Should().Contain(m => m.Value == 0.0 && m.MeasurementType == MeasurementType.ActivePowerImport && m.SensorId == "shellies/plug-s/hytta/spisestue");
+        }
     }
 }

@@ -25,5 +25,9 @@ namespace HeatKeeper.Reporter.Sdk.Tests
         string Tasmota_DS18B20 { get; }
 
         string AmbientWeather_F007TH { get; }
+
+        string ShellyPlugS_Energy { get; }
+
+        string ShellyPlugS_Power { get; }
     }
 }
