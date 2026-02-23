@@ -134,5 +134,20 @@ namespace HeatKeeper.Reporter.Sdk.Tests
             var measurements = await MqttSensors.ShellyPlugS().HandleMessage(message);
             measurements.Should().Contain(m => m.Value == 0.0 && m.MeasurementType == MeasurementType.ActivePowerImport && m.SensorId == "shellies/plug-s/hytta/spisestue");
         }
+
+        [Fact]
+        public async Task ShouldMapShellyPlusPlugS()
+        {
+            var sensorData = new ResourceBuilder().AddAssembly(typeof(MapperTests).Assembly).Build<ISensorData>();
+            MqttApplicationMessage message = new()
+            {
+                Payload = Encoding.UTF8.GetBytes(sensorData.ShellyPlugPlusS),
+                Topic = "shellies/plug-s/hytta/spisestue/status/switch:0"
+            };
+
+            var measurements = await MqttSensors.ShellyPlugS().HandleMessage(message);
+            measurements.Should().Contain(m => m.Value == 136.5 && m.MeasurementType == MeasurementType.ActivePowerImport && m.SensorId == "shellies/plug-s/hytta/spisestue");
+            measurements.Should().Contain(m => m.Value == 208808.371 && m.MeasurementType == MeasurementType.CumulativePowerImport && m.SensorId == "shellies/plug-s/hytta/spisestue");
+        }
     }
 }

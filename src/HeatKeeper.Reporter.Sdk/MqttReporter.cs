@@ -210,6 +210,19 @@ public static partial class MqttSensors
                 return [new Measurement(sensorId, MeasurementType.ActivePowerImport, RetentionPolicy.Hour, power, timestamp)];
             }
 
+            if (topic.EndsWith("/status/switch:0", StringComparison.OrdinalIgnoreCase))
+            {
+                var sensorId = topic[..^"/status/switch:0".Length];
+                var document = JsonDocument.Parse(payload);
+                var power = document.RootElement.GetProperty("apower").GetDouble();
+                var energyWh = document.RootElement.GetProperty("aenergy").GetProperty("total").GetDouble();
+                return
+                [
+                    new Measurement(sensorId, MeasurementType.ActivePowerImport, RetentionPolicy.Hour, power, timestamp),
+                    new Measurement(sensorId, MeasurementType.CumulativePowerImport, RetentionPolicy.Hour, energyWh, timestamp)
+                ];
+            }
+
             return Array.Empty<Measurement>();
         });
     }

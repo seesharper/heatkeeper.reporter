@@ -29,5 +29,7 @@ namespace HeatKeeper.Reporter.Sdk.Tests
         string ShellyPlugS_Energy { get; }
 
         string ShellyPlugS_Power { get; }
+
+        string ShellyPlugPlusS { get; }
     }
 }
