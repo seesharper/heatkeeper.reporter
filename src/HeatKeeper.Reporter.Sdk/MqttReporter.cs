@@ -188,6 +188,31 @@ public static partial class MqttSensors
         });
     }
 
+    public static MqttSensor ShellyPlus1PM()
+    {
+        return new MqttSensor("shelly/plus-1PM/#", async applicationMessage =>
+        {
+            var topic = applicationMessage.Topic;
+            var payload = applicationMessage.ConvertPayloadToString();
+            var timestamp = DateTime.UtcNow;
+
+            if (topic.EndsWith("/status/switch:0", StringComparison.OrdinalIgnoreCase))
+            {
+                var sensorId = topic[..^"/status/switch:0".Length];
+                var document = JsonDocument.Parse(payload);
+                var power = document.RootElement.GetProperty("apower").GetDouble();
+                var energyWh = document.RootElement.GetProperty("aenergy").GetProperty("total").GetDouble();
+                return
+                [
+                    new Measurement(sensorId, MeasurementType.ActivePowerImport, RetentionPolicy.Hour, power, timestamp),
+                    new Measurement(sensorId, MeasurementType.CumulativePowerImport, RetentionPolicy.Hour, energyWh, timestamp)
+                ];
+            }
+
+            return Array.Empty<Measurement>();
+        });
+    }
+
     public static MqttSensor ShellyPlugS()
     {
         return new MqttSensor("shellies/plug-s/#", async applicationMessage =>
